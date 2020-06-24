@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="526px" height="295px" viewBox="0 0 526 295" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Rectangle Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="69.3723265%" cy="55.4952331%" fx="69.3723265%" fy="55.4952331%" r="137.637408%" gradientTransform="translate(0.693723,0.554952),scale(0.560837,1.000000),rotate(-35.507817),translate(-0.693723,-0.554952)" id="radialGradient-1">
+            <stop stop-color="#28C8A0" offset="0%"></stop>
+            <stop stop-color="#5C5FEE" offset="48.9205025%"></stop>
+            <stop stop-color="#954486" offset="100%"></stop>
+            <stop stop-color="#8B4A8E" offset="100%"></stop>
+            <stop stop-color="#01E677" offset="100%"></stop>
+            <stop stop-color="#34DF60" offset="100%"></stop>
+            <stop stop-color="#0FBAAB" offset="100%"></stop>
+            <stop stop-color="#01E677" offset="100%"></stop>
+            <stop stop-color="#1F88E5" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle-Copy" fill="url(#radialGradient-1)" x="0" y="0" width="526" height="295"></rect>
+    </g>
+</svg>
