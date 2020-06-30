@@ -511,7 +511,7 @@
         .onComplete
         .add(function (result) {
         	var registrationData = {};
-        	Object.keys(data).forEach( function(key) {
+        	Object.keys(result.data).forEach( function(key) {
                 registrationData[key] = JSON.stringify(result.data[key])
             });
             
@@ -520,9 +520,9 @@
               	"method": "POST",
               	"timeout": 0,
               	"headers": {
-	                "X-Api-Key": "1h@_HG7@#Y5m2U#UxrY3wZ!gx0WzUkWZwiAy2TYl0EvWO@mZwwpskfBG@-1LCW_%",
-                    "Content-Type": "application/json",
-                },
+                    "X-Api-Key": "1h@_HG7@#Y5m2U#UxrY3wZ!gx0WzUkWZwiAy2TYl0EvWO@mZwwpskfBG@-1LCW_%",
+                    "Content-Type": "application/json"
+                  },
                 "data": registrationData
             })
         });
@@ -596,7 +596,7 @@
                 <h4 class="item mbr-regular mbr-fonts-style display-4">Suscríbete a nuestros servicios.</h4>
                 <div class="form1" data-form-type="formoid">
                     <!---Formbuilder Form--->
-                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="ITmQamJivkuDzJtqXJh+a+5zg3+88ey3EULr8qm8P8vz6riEty4apUQNesGXoGA2+DOsQwCmkGGRJ46nTaoPCYL2dhkTtc6FskTIT3eiQFsaieBB/w7C4o/kkIZ2aMh3.otPKl6p4vO+2VZjXjB06X/WTpWWNpc/+xocyjzltsXEeOk3CNzUUskOYv4XgOJb3k4TEL1oWMptLhauYfTiSgwybkHZDIy3RyLdXZumPDlRNZGwruVdzYPrwbQXUIMiN">
+                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="KfSujTnnCXbi0p8BKxF8ZVPA3R4Qb6/mWSLfTXWwAptauPqnUiOqi/fsifXZ0Eq4tzbJ3ennuX3rCniNCXhVhgLYkY9z+8ts+/RgO6Z0W5LOoIps4Hph4jSyQB0JD31a.oSgtMTOkjbpZQo+yEClDTDi/W1dKbX39injS82EEd6vAQkE/ymEQ5puqt2eIQSlwzp12zNGQFPPDP1PlGjRDst/pQzEPzPaRJx2vAqgU59RhLdjx7SdCmogmhtRFZpMj">
                         <div class="row">
                             <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling
                                 out the form!</div>
