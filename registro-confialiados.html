@@ -516,14 +516,14 @@
             });
             
             $.ajax({
-                "url": "https://sheet.best/api/sheets/8ebcad4b-21a8-427f-9842-2ce4d81ea3da",
-              	"method": "POST",
-              	"timeout": 0,
-              	"headers": {
+                url: "https://sheet.best/api/sheets/8ebcad4b-21a8-427f-9842-2ce4d81ea3da",
+              	method: "POST",
+                dataType: 'json',
+              	headers: {
                     "X-Api-Key": "1h@_HG7@#Y5m2U#UxrY3wZ!gx0WzUkWZwiAy2TYl0EvWO@mZwwpskfBG@-1LCW_%",
                     "Content-Type": "application/json"
                   },
-                "data": registrationData
+                data: JSON.stringify(registrationData)
             })
         });
     
@@ -596,7 +596,7 @@
                 <h4 class="item mbr-regular mbr-fonts-style display-4">Suscríbete a nuestros servicios.</h4>
                 <div class="form1" data-form-type="formoid">
                     <!---Formbuilder Form--->
-                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="KfSujTnnCXbi0p8BKxF8ZVPA3R4Qb6/mWSLfTXWwAptauPqnUiOqi/fsifXZ0Eq4tzbJ3ennuX3rCniNCXhVhgLYkY9z+8ts+/RgO6Z0W5LOoIps4Hph4jSyQB0JD31a.oSgtMTOkjbpZQo+yEClDTDi/W1dKbX39injS82EEd6vAQkE/ymEQ5puqt2eIQSlwzp12zNGQFPPDP1PlGjRDst/pQzEPzPaRJx2vAqgU59RhLdjx7SdCmogmhtRFZpMj">
+                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="5ST4+UY6lqbFLIxtm5nUEEUaFYnwWtg0lEW0OAeHKHA2CGeJSwFkxtcVUHxMfg+cy3hmlV4JLpcWVBiuJyKTP51OHgaDdj0RmbZTJF3OfBOGmJI5E9RMChnTsbo+yt+I.f4xJLACvlKiQONc2S5M/r1j8hYLYdEuu+r3VoduVAUPeoIWzDQsTfKSu/n3gHW1gWoUPm2atygguIH0PFoNHTYi3Qk2w8wspAwIAHFL90vH4PblXjNjnYTeRSeoKN2+o">
                         <div class="row">
                             <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling
                                 out the form!</div>
