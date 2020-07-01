@@ -33,6 +33,21 @@
 
 </head>
 <body>
+
+<!-- Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-171409500-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-171409500-1');
+</script>
+
+<!-- /Analytics -->
+
+
   <section class="menu1 cid-rVs1JRXiBo" once="menu" id="menu1-g">
 
     
@@ -512,7 +527,11 @@
         .add(function (result) {
         	var registrationData = {};
         	Object.keys(result.data).forEach( function(key) {
-                registrationData[key] = JSON.stringify(result.data[key])
+                registrationData[key] 
+                    = typeof(result.data[key]) === 'object' ?
+                    	JSON.stringify(result.data[key])
+                		:
+                		result.data[key];
             });
             
             $.ajax({
@@ -596,7 +615,7 @@
                 <h4 class="item mbr-regular mbr-fonts-style display-4">Suscríbete a nuestros servicios.</h4>
                 <div class="form1" data-form-type="formoid">
                     <!---Formbuilder Form--->
-                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="Snyl/mpSwPTJnBn+Wd93JnTLiaiZQC/sjYGCaYqHomYJtmNMdVwEvocqcwcXxkVgMn5c72Jl0xM6MjpIXqDaP3o5qe1q7R1oBs4N2u4uYQhWPsI3/PbaaFz7iCMn0YUc.dE5k+N4yP2h6YtRmovuP2UylBrsLRD5OcoIuB+UqrTnIztwXEE/A7KebTjrKP+V6x/x8KPTiICl0OmKsTAXApHJ9l50Yemu/3t0ecBXf6TUiEIbktncy3Fo5zj6EQ/87">
+                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="slnwUtQR435yH07jmFVCLR2xor/E+k/5hYcFfXShJqHMFFRe7VrrxoKcAPlLFAkCeOnj6wv14aKTgSk02aPyxQ8Xf+DfOPsqSIT3sITO9HKX9gu9yo3MoObybW7/gi8D.10ObL8l67jymLn5towLa6qq5Eqd8LTk1kxXCa7fTAbqUsAeNcIGNKMlKbEk1MvH/aC7ZkYbweQvVRY+3tdjzZqzY5ZFhwIKvU1Eb9Y+B7Hn6ZdP55GbXPE0RKbnZ6XX+">
                         <div class="row">
                             <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling
                                 out the form!</div>
