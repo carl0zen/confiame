@@ -120,16 +120,196 @@
 <div id="registro"><!-- Type valid HTML here -->
 	
 <div class="container">
-    <div id="surveyContainer"><survey :survey="survey"></survey></div>
+    <div id="surveyContainer"><survey :survey="survey">Loading...</survey></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+<script src="https://unpkg.com/jquery"></script>
 <script src="https://unpkg.com/survey-vue"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"></script>
 <script src="https://unpkg.com/inputmask@5.0.3/dist/inputmask.js"></script>
-<script src="https://surveyjs.azureedge.net/1.7.15/surveyjs-widgets.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet">
+<script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
+
+<script src="https://surveyjs.azureedge.net/1.7.19/surveyjs-widgets.js"></script>
+
+
 <link href="https://surveyjs.azureedge.net/1.7.15/modern.css" type="text/css" rel="stylesheet">
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet"> -->
+<script>
+/**     var widget1 = {
+        activatedBy: "property",
+        name: "select2",
+        htmlTemplate: "<select style='width: 100%;'></select>",
+        widgetIsLoaded: function() {
+          return typeof $ == "function" && !!$.fn.select2;
+        },
+        isFit: function(question) {
+          if (widget1.activatedBy == "property")
+            return (
+              question.renderAs === "select2" &&
+              question.getType() === "dropdown"
+            );
+          if (widget1.activatedBy == "type")
+            return question.getType() === "dropdown";
+          if (widget1.activatedBy == "customtype")
+            return question.getType() === "select2";
+          return false;
+        },
+        activatedByChanged: function(activatedBy) {
+          if (!this.widgetIsLoaded()) return;
+          widget1.activatedBy = activatedBy;
+          Survey.JsonObject.metaData.removeProperty("dropdown", "renderAs");
+          if (activatedBy == "property") {
+            Survey.JsonObject.metaData.addProperty("dropdown", {
+              name: "renderAs",
+              default: "standard",
+              choices: ["standard", "select2"]
+            });
+          }
+          if (activatedBy == "customtype") {
+            Survey.JsonObject.metaData.addClass("select2", [], null, "dropdown");
+          }
+        },
+        afterRender: function(question, el) {
+          var $el = $(el).is("select") ? $(el) : $(el).find("select");
+          var othersEl = document.createElement("input");
+          othersEl.type = "text";
+          othersEl.style.marginTop = "3px";
+          othersEl.style.display = "none";
+          othersEl.style.width = "100%";
+          $el
+            .parent()
+            .get(0)
+            .appendChild(othersEl);
+          $el.select2({
+            theme: "classic",
+            tags: question.hasOther,
+          });
+          var updateValueHandler = function() {
+            $el.val(question.value).trigger("change");
+            othersEl.style.display = !question.isOtherSelected ? "none" : "";
+          };
+          var updateCommentHandler = function() {
+            othersEl.value = question.comment ? question.comment : "";
+          };
+          var othersElChanged = function() {
+            question.comment = othersEl.value;
+          };
+          var updateChoices = function() {
+            $el.select2().empty();
+            $el.select2({
+              tags: question.hasOther,
+              data: question.visibleChoices.filter(function(choice) {
+                return choice.value !== "other";
+              }).map(function(choice) {
+                return {
+                  id: choice.value,
+                  text: choice.text
+                };
+              })
+            });
+            updateValueHandler();
+            updateCommentHandler();
+          };
+          question.choicesChangedCallback = updateChoices;
+          updateChoices();
+          $el.on("select2:select", function(e) {
+            question.value = e.target.value;
+          });
+          othersEl.onchange = othersElChanged;
+          question.valueChangedCallback = updateValueHandler;
+          question.commentChangedCallback = updateCommentHandler;
+          updateValueHandler();
+          updateCommentHandler();
+        },
+        willUnmount: function(question, el) {
+          $(el)
+            .find("select")
+            .off("select2:select")
+            .select2("destroy");
+        }
+      };
+    
+      Survey.CustomWidgetCollection.Instance.addCustomWidget(widget1);
+  **/  
+      var widget2 = {
+        name: "tagbox",
+        title: "Tag box",
+        iconName: "icon-tagbox",
+        widgetIsLoaded: function() {
+          return typeof $ == "function" && !!$.fn.select2;
+        },
+        defaultJSON: { choices: ["Item 1", "Item 2", "Item 3"] },
+        htmlTemplate: "<select multiple='multiple' style='width: 100%;'></select>",
+        isFit: function(question) {
+          return question.getType() === "tagbox";
+        },
+        activatedByChanged: function(activatedBy) {
+          Survey.JsonObject.metaData.addClass(
+            "tagbox",
+            [{ name: "hasOther", visible: false }],
+            null,
+            "checkbox"
+          );
+          Survey.JsonObject.metaData.addProperties("tagbox", [
+            { name: "tags", default: false }
+          ]);
+          Survey.JsonObject.metaData.addProperties("dropdown", [
+            { name: "tags", default: false }
+          ]);
+          Survey.JsonObject.metaData.addProperties("matrixdropdowncolumn", [
+            { name: "tags", default: false }
+          ]);
+        },
+        afterRender: function(question, el) {
+          var $el = $(el).is("select") ? $(el) : $(el).find("select");
+          $el.select2({
+            tags: question.tags,
+            theme: "classic"
+          });
+          var updateValueHandler = function() {
+            $el.val(question.value).trigger("change");
+          };
+          var updateChoices = function() {
+            // $el.select2().empty(); otherwise it doesn't keep changes made of new tags after saving
+            $el.select2({
+              tags: question.tags,
+              data: question.visibleChoices.filter(function(choice) {
+                return choice.value !== "other"
+              }).map(function(choice) {
+                return { id: choice.value, text: choice.text };
+              })
+            });
+            updateValueHandler();
+          };
+          question.choicesChangedCallback = updateChoices;
+          question.valueChangedCallback = updateValueHandler;
+          $el.on("select2:select", function(e) {
+            question.value = (question.value || []).concat(e.params.data.id);
+          });
+          $el.on("select2:unselect", function(e) {
+            var index = (question.value || []).indexOf(e.params.data.id);
+            if (index !== -1) {
+              var val = question.value;
+              val.splice(index, 1);
+              question.value = val;
+            }
+          });
+          updateChoices();
+        },
+        willUnmount: function(question, el) {
+          $(el)
+            .find("select")
+            .off("select2:select")
+            .select2("destroy");
+        }
+      };
+
+ 	Survey.CustomWidgetCollection.Instance.addCustomWidget(widget2, "customtype");
+
+</script>
+
 <script>    
 	var surveyJSON = { 
         title: "**Solicita tu Cuenta** <br/> Llena el siguiente formulario",
@@ -142,6 +322,15 @@
                 description: "En confíame tus datos son lo más importante, es por esto que los tratamos con cuidado y **no los vendemos a terceros**.",
                 name:"datos-personales",
                 questions: [
+                    {
+                      name: "profile",
+                        type: "file",
+                        title: "Upload a profile pic"
+                    },
+                    {
+                      	type: "tagbox",
+                        tags: true
+                    },
                     {
                         "name": "name",
                         "type": "text",
@@ -192,7 +381,7 @@
                         "name": "phone",
                         "type": "text",
                         "inputMask": "phone",
-                        "title": "Teléfono:",
+                        "title": "Teléfono Móvil:",
                         "isRequired": true,
                         "inputFormat": "🇲🇽 +52 (###)-###-####",
                     }
@@ -200,12 +389,65 @@
             },
             {
                 name: 'location',
-                title: "¿Donde vives?",
+                title: "¿Dónde vives?",
                 description: 'Por favor compartenos la zona en la que vives',
                 questions: [
                     {
+                        "type": "dropdown",
+                        "renderAs": "select2",
+                        "select2Config": {
+                            "placeholder": "Buscar tu país...",
+                            templateResult: function(country) {
+                                if (!country.id) {
+                                    return "Buscando..."
+                                } else {
+                                    return $(
+                                        "<span>"+
+                                        	"<img width='20px' src='"
+                                        		+ country.flag + 
+                                             "' />"+
+                                        	"<span style='margin-left: 10px;'>" 
+                                        		+ country.text + 
+                                        	"</span>"+
+                                        "</span>"
+                                    )
+                                }
+                                    
+                                return country;
+                            },
+                            id: function (item) {
+                                debugger
+                                return item.id 
+                            },
+                            formatSelection: function(result) {
+                                return result.id
+                            },
+                            ajax: {
+                                delay: 250,
+                                "url": function(params) {
+                                 	return "https://restcountries.eu/rest/v2/name/" + params.term   
+                                },
+                                processResults: function (data) {
+                                    return {
+                                        results: data.map(function(dataItem) {
+                                            return {
+                                                id: dataItem.alpha2Code,
+                                                value: dataItem.alpha2Code,
+                                                text: dataItem.name,
+                                                flag: dataItem.flag
+                                            }
+                                        })
+                                    };
+                                }
+                            },
+                        },
+                        "name": "country",
+                        "title": "País"
+                    },
+                    {
                         type: "text",
                         name: "zip",
+                        visibleIf: "{country} = 'MX' ",
                         title: "Código Postal"
                     },
                     {
@@ -229,7 +471,8 @@
             	description: 'Por favor selecciona todas las habilidades que posees',
                 questions: [
                     {
-                    	type: 'dropdown',
+                    	"type": "dropdown",
+                        "renderAs": "select2",
                         name: 'education-level',
                         title: 'Nivel de escolaridad',
                         isRequired: true,
@@ -261,9 +504,19 @@
                         ]
                     },
                     {
-                    	type: 'dropdown',
+                    	"type": "dropdown",
+                        "renderAs": "select2",
                         name: 'universityName',
+                        "select2config": {
+                            tags: true,
+                            language: {
+                               "noResults": function(){
+                                       return "No hay resultados";
+                             	}
+                            }
+            			},
                         visibleIf: '{education-level} > 3',
+                        hasOther: true,
                         title: 'Nombre de tu universidad',
                         description: 'Si tienes maestría o doctorado, separa con una coma todas tus universidades',
                         choicesOrder: 'asc',
@@ -280,30 +533,31 @@
                         description: 'Si tienes más de uno, sepáralo por una coma'
                     },
                     {
-                    	type: 'dropdown',
+                    	"type": "dropdown",
+                        "renderAs": "select2",
                         name: 'experience',
                         visibleIf: '{education-level} > 3',
                         title: 'Años de Experiencia Profesional',
                         choices: [
                             {
                                 value: 1,
-                                text: '0-1 año - Recien graduado'
+                                text: '0-1 año'
                             },
                             {
                                 value: 2,
-                                text: '1-3 años - Novato'
+                                text: '1-3 años'
                             },
                             {
                                 value: 3,
-                                text: '3-5 años - Intermedio'
+                                text: '3-5 años'
                             },
                             {
                                 value: 4,
-                                text: '5-10 años - Avanzado'
+                                text: '5-10 años'
                             },
                             {
                                 value: 5,
-                                text: '5-10+ años - Experto'
+                                text: '10+ años'
                             }
                         ]
                     },
@@ -317,6 +571,9 @@
                             'Servicios a domicilio',
                             'Trabajo a distancia'
                         ]
+                    },
+                    {
+                        
                     },
                     {
 						type: "matrixdynamic",
@@ -335,8 +592,9 @@
                                 isRequired: true,
                                 title: "Interés",
                                 cellType: "dropdown",
+                        		renderAs: "select2",
                                 hasOther: true,
-                                otherText: "Otra habilidad, especifica",
+                                otherText: "Otro trabajo, especifica",
                                 choicesByUrl: {
                                     url: "https://sheet.best/api/sheets/0e3ec37c-38e0-4e65-8af0-20c822b86b9d/tabs/ciudad",
                                     valueName: 'name'
@@ -390,7 +648,7 @@
                                 title: "Interés",
                                 cellType: "dropdown",
                                 hasOther: true,
-                                otherText: "Otra habilidad, especifica",
+                                otherText: "Otro trabajo, especifica",
                                 choicesByUrl: {
                                     url: "https://sheet.best/api/sheets/0e3ec37c-38e0-4e65-8af0-20c822b86b9d/tabs/domicilio",
                                     valueName: 'name'
@@ -444,7 +702,7 @@
                                 title: "Interés",
                                 cellType: "dropdown",
                                 hasOther: true,
-                                otherText: "Otra habilidad, especifica",
+                                otherText: "Otro trabajo, especifica",
                                 choicesByUrl: {
                                     url: "https://sheet.best/api/sheets/0e3ec37c-38e0-4e65-8af0-20c822b86b9d/tabs/remoto",
                                     valueName: 'name'
@@ -483,12 +741,24 @@
                 ]
             },
             {
-                name: "terms",
+                name: "payment-terms",
+                title: "Crea tu perfil",
                 questions: [
                     {
-                        "type": "signaturepad",
-                        "name": "signature",
-                        "title": "Acepto los términos y condiciones"
+                        "type": "editor",
+                        "name": "summary",
+                        "title": "Resumen ejecutivo"
+                    },
+                    {
+                        type: "text",
+                        inputMask: "currency",
+                        name: "rate",
+                        title: "Currency:"
+                    },
+                    {
+                        type: "signaturepad",
+                        name: "signature",
+                        title: "Acepto los términos y condiciones"
                     }
                 ]
             }
@@ -502,8 +772,11 @@
             }
         ]
     }
+
     
     Survey.StylesManager.applyTheme("modern");
+    Survey.matrixDropdownColumnTypes.dropdown.properties.push("renderAs");
+    Survey.matrixDropdownColumnTypes.dropdown.properties.push("select2Config");
     
     var survey = new Survey.Model(surveyJSON);
     survey.showProgressBar = 'top';
@@ -615,7 +888,7 @@
                 <h4 class="item mbr-regular mbr-fonts-style display-4">Suscríbete a nuestros servicios.</h4>
                 <div class="form1" data-form-type="formoid">
                     <!---Formbuilder Form--->
-                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="slnwUtQR435yH07jmFVCLR2xor/E+k/5hYcFfXShJqHMFFRe7VrrxoKcAPlLFAkCeOnj6wv14aKTgSk02aPyxQ8Xf+DfOPsqSIT3sITO9HKX9gu9yo3MoObybW7/gi8D.10ObL8l67jymLn5towLa6qq5Eqd8LTk1kxXCa7fTAbqUsAeNcIGNKMlKbEk1MvH/aC7ZkYbweQvVRY+3tdjzZqzY5ZFhwIKvU1Eb9Y+B7Hn6ZdP55GbXPE0RKbnZ6XX+">
+                    <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler px-2" data-form-title="My Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="KRaLuoaSUuqZwWaXXZTU0a9qrBQ8KSH3acvCjgoDqoPx32fAhx8J3ZGrny2oSW2kbzQt5kxkNgsvrUqBm73cWzPIjXenuallqqYUIZoILpEXR/01CYUi0bylTUMwsZT0.XT0YmSu48+L6sDc/GSL20AHXMHBqe7k323+y4wzR6Jrcnk8pMgyTUEPHX6dKIXwcqlMxY48fv0JdIEyrISwd0wHlxlYyXHC0k8SNtOf/lRM6Wja5eQQlVLKwNBTET7QT">
                         <div class="row">
                             <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling
                                 out the form!</div>
